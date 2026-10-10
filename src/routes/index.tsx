@@ -172,7 +172,7 @@ function Index() {
               {([["Çimento 50 kg", 2, "Kritik", "bad"], ["Demir Ø12", 8, "Azalıyor", "warn"], ["Seramik Yapıştırıcı", 5, "Azalıyor", "warn"], ["Alçıpan 12,5 mm", 12, "Normal", "ok"], ["İzolasyon Malzemesi", 25, "Normal", "ok"]] as [string, number, string, Tone][]).map(([t, s, b, tone]) => (
                 <div key={t} className="flex items-center gap-3 py-2">
                   <div className="grid h-11 w-11 place-items-center rounded-md bg-muted text-muted-foreground"><Package className="h-6 w-6" /></div>
-                  <div className="min-w-0 flex-1"><div className="truncate text-sm text-navy">{t}</div><div className={`text-sm ${tone === "ok" ? "text-ok" : "text-bad"}`}>Stok: {s}</div></div>
+                  <div className="min-w-0 flex-1"><div className="text-sm leading-tight text-navy">{t}</div><div className={`text-sm ${tone === "ok" ? "text-ok" : "text-bad"}`}>Stok: {s}</div></div>
                   <span className={`shrink-0 rounded px-2 py-1 text-xs ${soft[tone]}`}>{b}</span><ChevronRight className="h-4 w-4" />
                 </div>
               ))}
