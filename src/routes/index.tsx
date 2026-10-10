@@ -58,7 +58,7 @@ function Index() {
     return () => window.removeEventListener("resize", f);
   }, []);
   return (
-    <div className="flex w-[1536px]" style={{ zoom, minHeight: `${1024}px` }}>
+    <div className="flex w-[1536px]" style={{ zoom, minHeight: `calc(100vh / ${zoom})` }}>
       <aside className="flex w-64 shrink-0 flex-col border-r bg-sidebar">
         <div className="flex items-center gap-2 px-5 py-5">
           <div className="grid h-9 w-9 place-items-center rounded-lg bg-brand text-primary-foreground"><Box className="h-5 w-5" /></div>
@@ -140,7 +140,7 @@ function Index() {
             </div>
           </div>
 
-          <div className="grid grid-cols-[1fr_1fr_0.9fr_0.95fr] gap-4">
+          <div className="grid grid-cols-[1.05fr_1fr_0.9fr_1.05fr] gap-4">
             <Card title="Son İşlemler">
               {([
                 ["Satış Faturası", "#SF2024-0012", "ABC İnşaat Ltd. Şti.", "14:21", Receipt, "bad", ""],
@@ -152,7 +152,7 @@ function Index() {
                 <div key={t} className="flex items-center gap-3 py-2.5">
                   <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-lg ${solid[tone]}`}><I className="h-5 w-5" /></div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm text-navy">{t} <span className="ml-1">{n}</span></div>
+                    <div className="whitespace-nowrap text-sm text-navy">{t} <span className="ml-1">{n}</span></div>
                     <div className="text-sm text-muted-foreground">{s}{amt && <span className="ml-5 font-semibold text-ok">{amt}</span>}</div>
                   </div>
                   <span className="text-sm text-muted-foreground">{h}</span>
@@ -181,7 +181,7 @@ function Index() {
               {([["Ödeme Vadesi (3 cari)", "BUGÜN", "bad"], ["Verilecek Sipariş (8 ürün)", "YARIN", "warn"], ["Stok Sayımı", "12.10.2024", null], ["KDV Beyannamesi", "26.10.2024", null]] as [string, string, Tone | null][]).map(([t, d, tone]) => (
                 <div key={t} className="flex items-center gap-3 py-4">
                   <Calendar className={`h-6 w-6 ${tone === "bad" ? "text-bad" : tone === "warn" ? "text-warn" : "text-brand"}`} />
-                  <span className="min-w-0 flex-1 text-sm text-navy">{t}</span>
+                  <span className="min-w-0 flex-1 whitespace-nowrap text-sm text-navy">{t}</span>
                   <span className={`shrink-0 rounded px-2 py-1 text-sm ${tone ? soft[tone] : "bg-muted text-navy"}`}>{d}</span>
                   {tone && <ChevronRight className="h-4 w-4" />}
                 </div>
