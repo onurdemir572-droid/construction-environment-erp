@@ -38,6 +38,20 @@ const menu: [string, Ic][] = [
   ["Çek ve Senet", CheckSquare], ["Fiyatlandırma", Tag], ["Raporlar", BarChart3], ["Yönetim", Settings],
 ];
 
+const sub: Record<string, string[]> = {
+  "Ürün ve Stok": ["Ürün Listesi", "Yeni Ürün", "Kategoriler", "Stok Hareketleri", "Stok Sayımı"],
+  "Satış": ["Satış Faturaları", "Teklifler", "Siparişler", "Perakende Satış (POS)", "İadeler"],
+  "Satınalma": ["Satınalma Siparişleri", "Alış Faturaları", "Tedarikçiler", "Talepler"],
+  "Depo": ["Depolar", "Mal Kabul", "Sevk / İrsaliye", "Depo Transferi"],
+  "Cari Hesaplar": ["Cari Listesi", "Yeni Cari", "Cari Ekstre", "Cari Limitler"],
+  "Kasa ve Banka": ["Kasalar", "Banka Hesapları", "Tahsilatlar", "Ödemeler", "POS Hesapları"],
+  "Fatura ve e-Belge": ["e-Fatura", "e-Arşiv", "e-İrsaliye", "Gelen Belgeler"],
+  "Çek ve Senet": ["Alınan Çekler", "Verilen Çekler", "Senetler", "Portföy"],
+  "Fiyatlandırma": ["Fiyat Listeleri", "Kampanyalar", "İskontolar"],
+  "Raporlar": ["Satış Raporları", "Stok Raporları", "Cari Raporları", "Kâr / Zarar"],
+  "Yönetim": ["Kullanıcılar", "Yetkiler", "Şubeler", "Onay Akışları"],
+};
+
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="rounded-xl border bg-card p-4 shadow-sm">
@@ -52,6 +66,7 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
 
 function Index() {
   const [zoom, setZoom] = useState(1);
+  const [open, setOpen] = useState<string | null>(null);
   useEffect(() => {
     const f = () => setZoom(window.innerWidth / 1536);
     f(); window.addEventListener("resize", f);
@@ -70,9 +85,19 @@ function Index() {
         <nav className="flex flex-col gap-1 px-3">
           <a className="flex items-center gap-3 rounded-lg bg-accent px-3 py-3 text-base font-semibold text-accent-foreground"><Home className="h-5 w-5" />Ana Sayfa</a>
           {menu.map(([t, I]) => (
-            <a key={t} className="flex items-center gap-3 rounded-lg px-3 py-3 text-base text-navy hover:bg-muted">
-              <I className="h-5 w-5" /><span className="flex-1">{t}</span><ChevronRight className="h-4 w-4 text-muted-foreground" />
-            </a>
+            <div key={t}>
+              <button onClick={() => setOpen(open === t ? null : t)} className={`flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-base text-navy hover:bg-muted ${open === t ? "bg-muted" : ""}`}>
+                <I className="h-5 w-5" /><span className="flex-1">{t}</span>
+                <ChevronRight className={`h-4 w-4 text-muted-foreground transition-transform ${open === t ? "rotate-90" : ""}`} />
+              </button>
+              {open === t && (
+                <div className="ml-6 mt-1 flex flex-col border-l pl-4">
+                  {(sub[t] ?? []).map((x) => (
+                    <a key={x} href="#" className="rounded-md px-3 py-2 text-[15px] text-muted-foreground hover:bg-muted hover:text-navy">{x}</a>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </nav>
         <div className="mt-auto px-3 pb-4">
