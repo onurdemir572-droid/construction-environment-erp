@@ -42,8 +42,8 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
   return (
     <div className="rounded-xl border bg-card p-4 shadow-sm">
       <div className="mb-2 flex items-center justify-between">
-        <h3 className="text-xl font-bold text-navy">{title}</h3>
-        <a className="flex items-center gap-1 text-sm text-brand" href="#">Tümünü Gör <ArrowRight className="h-4 w-4" /></a>
+        <h3 className="whitespace-nowrap text-xl font-bold text-navy">{title}</h3>
+        <a className="flex shrink-0 items-center gap-1 whitespace-nowrap text-sm text-brand" href="#">Tümünü Gör <ArrowRight className="h-4 w-4" /></a>
       </div>
       <div className="divide-y">{children}</div>
     </div>
@@ -140,7 +140,7 @@ function Index() {
             </div>
           </div>
 
-          <div className="grid grid-cols-[1.05fr_1fr_0.9fr_1.05fr] gap-4">
+          <div className="grid grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)_minmax(0,0.95fr)_minmax(0,1fr)] gap-4">
             <Card title="Son İşlemler">
               {([
                 ["Satış Faturası", "#SF2024-0012", "ABC İnşaat Ltd. Şti.", "14:21", Receipt, "bad", ""],
@@ -163,7 +163,7 @@ function Index() {
               {([["Satınalma Siparişi", 4, ClipboardList, "violet"], ["Fiyat Listesi Değişikliği", 2, DollarSign, "warn"], ["Cari Limit Artış Talebi", 1, User, "warn"], ["Kampanya Onayı", 3, Tag, "ok"]] as [string, number, Ic, Tone][]).map(([t, c, I, tone]) => (
                 <div key={t} className="flex items-center gap-4 py-3.5">
                   <div className={`grid h-11 w-11 place-items-center rounded-lg ${soft[tone]}`}><I className="h-5 w-5" /></div>
-                  <div className="min-w-0 flex-1"><div className="text-sm text-navy">{t}</div><div className="text-sm text-muted-foreground">Onay bekliyor</div></div>
+                  <div className="min-w-0 flex-1"><div className="whitespace-nowrap text-sm text-navy">{t}</div><div className="text-sm text-muted-foreground">Onay bekliyor</div></div>
                   <span className="grid h-8 w-8 place-items-center rounded-md bg-bad-soft text-base text-bad">{c}</span>
                 </div>
               ))}
