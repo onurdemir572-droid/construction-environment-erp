@@ -140,7 +140,7 @@ function Index() {
             </div>
           </div>
 
-          <div className="grid grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)_minmax(0,0.95fr)_minmax(0,1fr)] gap-4">
+          <div className="grid gap-4" style={{ gridTemplateColumns: "minmax(0,1.05fr) minmax(0,1fr) minmax(0,0.95fr) minmax(0,1fr)" }}>
             <Card title="Son İşlemler">
               {([
                 ["Satış Faturası", "#SF2024-0012", "ABC İnşaat Ltd. Şti.", "14:21", Receipt, "bad", ""],
