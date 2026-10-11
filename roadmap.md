@@ -1,0 +1,3 @@
+- [x] Sol menü alt başlıkları
+- [x] Normal yazı boyutu
+- [x] Modül sayfaları (liste ekranları)
