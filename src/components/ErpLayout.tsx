@@ -13,7 +13,7 @@ export function ErpLayout({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (r) => r.location.pathname });
   const now = useNow();
   const [zoom, setZoom] = useState(1);
-  const [open, setOpen] = useState<string | null>(() => Object.keys(sub).find((k) => sub[k].some((x) => path === "/modul/" + slugify(x))) ?? null);
+  const [open, setOpen] = useState<string | null>(() => Object.keys(sub).find((k) => (sub[k] ?? []).some((x) => path === "/modul/" + slugify(x))) ?? null);
   useEffect(() => {
     const f = () => setZoom(window.innerWidth / 1536);
     f(); window.addEventListener("resize", f);

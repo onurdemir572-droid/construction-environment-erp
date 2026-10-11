@@ -17,7 +17,7 @@ function dataFor(group: string, slug: string): { cols: Col[]; rows: Record<strin
   const seed = slug.length;
   const rnd = (i: number, m: number) => ((i * 9301 + seed * 49297) % 233280) / 233280 * m;
   const date = (i: number) => `${String(10 - (i % 9)).padStart(2, "0")}.10.2024`;
-  const st = (i: number) => { const [s, t] = statuses[i % 4]; return <span className={`rounded px-2 py-0.5 text-xs font-medium ${soft[t]}`}>{s}</span>; };
+  const st = (i: number) => { const [s, t] = statuses[i % 4]!; return <span className={`rounded px-2 py-0.5 text-xs font-medium ${soft[t]}`}>{s}</span>; };
   const R = Array.from({ length: 10 }, (_, i) => i);
   if (group === "Ürün ve Stok" || group === "Depo" || group === "Fiyatlandırma")
     return {
