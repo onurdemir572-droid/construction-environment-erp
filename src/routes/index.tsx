@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <>
-        <main className="space-y-5 p-6">
+        <div className="space-y-5">
           <div>
             <h1 className="text-[28px] font-bold text-navy">Merhaba, Yönetici Bey</h1>
             <p className="mt-1 text-[15px] text-muted-foreground">İşletmenizin bugünkü özeti ve önemli işlemler aşağıdadır.</p>
@@ -78,7 +78,7 @@ function Index() {
                 <div key={t} className="flex items-center gap-3 py-2.5">
                   <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-lg ${solid[tone]}`}><I className="h-5 w-5" /></div>
                   <div className="min-w-0 flex-1">
-                    <div className="whitespace-nowrap text-sm text-navy">{t} <span className="ml-1">{n}</span></div>
+                    <div className="text-sm leading-tight text-navy">{t} <span className="ml-1">{n}</span></div>
                     <div className="text-sm text-muted-foreground">{s}{amt && <span className="ml-5 font-semibold text-ok">{amt}</span>}</div>
                   </div>
                   <span className="text-sm text-muted-foreground">{h}</span>
@@ -89,7 +89,7 @@ function Index() {
               {([["Satınalma Siparişi", 4, ClipboardList, "violet"], ["Fiyat Listesi Değişikliği", 2, DollarSign, "warn"], ["Cari Limit Artış Talebi", 1, User, "warn"], ["Kampanya Onayı", 3, Tag, "ok"]] as [string, number, Ic, Tone][]).map(([t, c, I, tone]) => (
                 <div key={t} className="flex items-center gap-4 py-3.5">
                   <div className={`grid h-11 w-11 place-items-center rounded-lg ${soft[tone]}`}><I className="h-5 w-5" /></div>
-                  <div className="min-w-0 flex-1"><div className="whitespace-nowrap text-sm text-navy">{t}</div><div className="text-sm text-muted-foreground">Onay bekliyor</div></div>
+                  <div className="min-w-0 flex-1"><div className="text-sm leading-tight text-navy">{t}</div><div className="text-sm text-muted-foreground">Onay bekliyor</div></div>
                   <span className="grid h-8 w-8 place-items-center rounded-md bg-bad-soft text-[14px] text-bad">{c}</span>
                 </div>
               ))}
@@ -107,14 +107,14 @@ function Index() {
               {([["Ödeme Vadesi (3 cari)", "BUGÜN", "bad"], ["Verilecek Sipariş (8 ürün)", "YARIN", "warn"], ["Stok Sayımı", "12.10.2024", null], ["KDV Beyannamesi", "26.10.2024", null]] as [string, string, Tone | null][]).map(([t, d, tone]) => (
                 <div key={t} className="flex items-center gap-3 py-4">
                   <Calendar className={`h-6 w-6 ${tone === "bad" ? "text-bad" : tone === "warn" ? "text-warn" : "text-brand"}`} />
-                  <span className="min-w-0 flex-1 whitespace-nowrap text-sm text-navy">{t}</span>
+                  <span className="min-w-0 flex-1 text-sm leading-tight text-navy">{t}</span>
                   <span className={`shrink-0 rounded px-2 py-1 text-sm ${tone ? soft[tone] : "bg-muted text-navy"}`}>{d}</span>
                   {tone && <ChevronRight className="h-4 w-4" />}
                 </div>
               ))}
             </Card>
           </div>
-        </main>
+        </div>
     </>
   );
 }
