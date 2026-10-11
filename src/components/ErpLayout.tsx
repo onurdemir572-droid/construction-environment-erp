@@ -13,7 +13,7 @@ export function ErpLayout({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (r) => r.location.pathname });
   const now = useNow();
   const [zoom, setZoom] = useState(1);
-  const [open, setOpen] = useState<string | null>(null);
+  const [open, setOpen] = useState<string | null>(() => Object.keys(sub).find((k) => sub[k].some((x) => path === "/modul/" + slugify(x))) ?? null);
   useEffect(() => {
     const f = () => setZoom(window.innerWidth / 1536);
     f(); window.addEventListener("resize", f);
@@ -40,7 +40,7 @@ export function ErpLayout({ children }: { children: ReactNode }) {
               {open === t && (
                 <div className="ml-6 mt-1 flex flex-col border-l pl-4">
                   {(sub[t] ?? []).map((x) => (
-                    <Link key={x} to="/modul/$slug" params={{ slug: slugify(x) }} className={`rounded-md px-3 py-2 text-[15px] hover:bg-muted ${path === "/modul/" + slugify(x) ? "bg-accent font-medium text-accent-foreground" : "text-muted-foreground hover:text-navy"}`}>{x}</Link>
+                    <Link key={x} to="/modul/$slug" params={{ slug: slugify(x) }} className={`rounded-md px-3 py-1.5 text-[13px] hover:bg-muted ${path === "/modul/" + slugify(x) ? "bg-accent font-medium text-accent-foreground" : "text-muted-foreground hover:text-navy"}`}>{x}</Link>
                   ))}
                 </div>
               )}
