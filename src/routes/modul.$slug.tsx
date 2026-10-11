@@ -1,5 +1,7 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
-import { Plus, Download, Filter, Search, MoreHorizontal, Printer } from "lucide-react";
+import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+import { Plus, Download, Filter, Search, Printer, Trash2, X } from "lucide-react";
 import { sub, slugify, menu, soft, type Tone } from "@/lib/erp";
 
 type Col = { k: string; t: string; right?: boolean };
@@ -18,7 +20,7 @@ function dataFor(group: string, slug: string): { cols: Col[]; rows: Record<strin
   const rnd = (i: number, m: number) => ((i * 9301 + seed * 49297) % 233280) / 233280 * m;
   const date = (i: number) => `${String(10 - (i % 9)).padStart(2, "0")}.10.2024`;
   const st = (i: number) => { const [s, t] = statuses[i % 4]!; return <span className={`rounded px-2 py-0.5 text-xs font-medium ${soft[t]}`}>{s}</span>; };
-  const R = Array.from({ length: 10 }, (_, i) => i);
+  const R = Array.from({ length: 22 }, (_, i) => i);
   if (group === "Ürün ve Stok" || group === "Depo" || group === "Fiyatlandırma")
     return {
       kpis: [["Toplam Ürün", "2.847"], ["Kritik Stok", "18"], ["Stok Değeri", tl(4825300)], ["Depo Sayısı", "3"]],
@@ -66,18 +68,48 @@ export const Route = createFileRoute("/modul/$slug")({
 function Modul() {
   const { title, group } = Route.useLoaderData();
   const { slug } = Route.useParams();
-  const { cols, rows, kpis } = dataFor(group, slug);
+  const base = useMemo(() => dataFor(group, slug), [group, slug]);
+  const [rows, setRows] = useState(base.rows);
+  const [q, setQ] = useState("");
+  const [fs, setFs] = useState<string>("Tümü");
+  const [page, setPage] = useState(1);
+  const [showNew, setShowNew] = useState(false);
+  const [form, setForm] = useState<Record<string, string>>({});
+  const [sel, setSel] = useState<Set<number>>(new Set());
+  useEffect(() => { setRows(base.rows); setQ(""); setFs("Tümü"); setPage(1); setSel(new Set()); }, [base]);
+  const { cols, kpis } = base;
+  const text = (v: unknown): string => (typeof v === "object" && v && "props" in (v as any) ? String((v as any).props.children) : String(v ?? ""));
+  const filtered = rows.map((r, i) => ({ r, i })).filter(({ r }) =>
+    (fs === "Tümü" || text(r.durum) === fs) &&
+    (!q || cols.some((c) => text(r[c.k]).toLocaleLowerCase("tr").includes(q.toLocaleLowerCase("tr")))));
+  const per = 8;
+  const pages = Math.max(1, Math.ceil(filtered.length / per));
+  const cur = Math.min(page, pages);
+  const shown = filtered.slice((cur - 1) * per, cur * per);
+  const exportCsv = () => {
+    const lines = [cols.map((c) => c.t).join(";"), ...filtered.map(({ r }) => cols.map((c) => text(r[c.k])).join(";"))];
+    const blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `${slug}.csv`; a.click();
+    toast.success("Excel dosyası indirildi");
+  };
+  const save = () => {
+    const r: Record<string, React.ReactNode> = {};
+    for (const c of cols) r[c.k] = c.k === "durum" ? <span className={`rounded px-2 py-0.5 text-xs font-medium ${soft.brand}`}>Taslak</span> : form[c.k] || "-";
+    setRows([r, ...rows]); setShowNew(false); setForm({}); setPage(1);
+    toast.success("Kayıt eklendi");
+  };
+  const del = () => { setRows(rows.filter((_, i) => !sel.has(i))); toast.success(`${sel.size} kayıt silindi`); setSel(new Set()); };
   return (
     <>
       <div className="flex items-end justify-between">
         <div>
-          <div className="text-[13px] text-muted-foreground">Ana Sayfa / {group} / <span className="text-navy">{title}</span></div>
+          <div className="text-[13px] text-muted-foreground"><Link to="/" className="hover:text-brand">Ana Sayfa</Link> / {group} / <span className="text-navy">{title}</span></div>
           <h1 className="mt-1 text-[26px] font-bold text-navy">{title}</h1>
         </div>
         <div className="flex gap-2">
-          <button className="flex items-center gap-2 rounded-lg border bg-card px-3 py-2 text-[13px] text-navy hover:bg-muted"><Printer className="h-4 w-4" />Yazdır</button>
-          <button className="flex items-center gap-2 rounded-lg border bg-card px-3 py-2 text-[13px] text-navy hover:bg-muted"><Download className="h-4 w-4" />Excel</button>
-          <button className="flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-[13px] font-medium text-primary-foreground hover:opacity-90"><Plus className="h-4 w-4" />Yeni Kayıt</button>
+          <button onClick={() => window.print()} className="flex items-center gap-2 rounded-lg border bg-card px-3 py-2 text-[13px] text-navy hover:bg-muted"><Printer className="h-4 w-4" />Yazdır</button>
+          <button onClick={exportCsv} className="flex items-center gap-2 rounded-lg border bg-card px-3 py-2 text-[13px] text-navy hover:bg-muted"><Download className="h-4 w-4" />Excel</button>
+          <button onClick={() => setShowNew(true)} className="flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-[13px] font-medium text-primary-foreground hover:opacity-90"><Plus className="h-4 w-4" />Yeni Kayıt</button>
         </div>
       </div>
       <div className="grid grid-cols-4 gap-4">
@@ -90,33 +122,61 @@ function Modul() {
       </div>
       <div className="rounded-xl border bg-card shadow-sm">
         <div className="flex items-center gap-3 border-b p-4">
-          <div className="flex w-80 items-center gap-2 rounded-lg border px-3 py-2 text-[13px] text-muted-foreground"><Search className="h-4 w-4" />Bu listede ara...</div>
-          <button className="flex items-center gap-2 rounded-lg border px-3 py-2 text-[13px] text-navy hover:bg-muted"><Filter className="h-4 w-4" />Filtrele</button>
-          <span className="ml-auto text-[13px] text-muted-foreground">{rows.length} kayıt gösteriliyor</span>
+          <label className="flex w-80 items-center gap-2 rounded-lg border px-3 py-2 text-[13px] text-muted-foreground focus-within:border-brand">
+            <Search className="h-4 w-4" />
+            <input value={q} onChange={(e) => { setQ(e.target.value); setPage(1); }} placeholder="Bu listede ara..." className="w-full bg-transparent text-navy outline-none placeholder:text-muted-foreground" />
+          </label>
+          <label className="flex items-center gap-2 rounded-lg border px-3 py-2 text-[13px] text-navy">
+            <Filter className="h-4 w-4" />
+            <select value={fs} onChange={(e) => { setFs(e.target.value); setPage(1); }} className="bg-transparent outline-none">
+              {["Tümü", ...statuses.map(([x]) => x)].map((x) => <option key={x}>{x}</option>)}
+            </select>
+          </label>
+          {sel.size > 0 && <button onClick={del} className="flex items-center gap-2 rounded-lg bg-bad-soft px-3 py-2 text-[13px] text-bad"><Trash2 className="h-4 w-4" />{sel.size} kaydı sil</button>}
+          <span className="ml-auto text-[13px] text-muted-foreground">{filtered.length} kayıt</span>
         </div>
         <table className="w-full text-[13px]">
           <thead className="bg-muted text-left text-muted-foreground">
             <tr>
-              <th className="w-10 px-4 py-3"><input type="checkbox" /></th>
+              <th className="w-10 px-4 py-3"><input type="checkbox" checked={shown.length > 0 && shown.every(({ i }) => sel.has(i))} onChange={(e) => { const n = new Set(sel); shown.forEach(({ i }) => e.target.checked ? n.add(i) : n.delete(i)); setSel(n); }} /></th>
               {cols.map((c) => <th key={c.k} className={`px-4 py-3 font-medium ${c.right ? "text-right" : ""}`}>{c.t}</th>)}
               <th className="w-10" />
             </tr>
           </thead>
           <tbody className="divide-y">
-            {rows.map((r, i) => (
+            {shown.map(({ r, i }) => (
               <tr key={i} className="text-navy hover:bg-muted/60">
-                <td className="px-4 py-3"><input type="checkbox" /></td>
+                <td className="px-4 py-3"><input type="checkbox" checked={sel.has(i)} onChange={() => { const n = new Set(sel); n.has(i) ? n.delete(i) : n.add(i); setSel(n); }} /></td>
                 {cols.map((c) => <td key={c.k} className={`px-4 py-3 ${c.right ? "text-right tabular-nums" : ""}`}>{r[c.k]}</td>)}
-                <td className="px-2"><MoreHorizontal className="h-4 w-4 text-muted-foreground" /></td>
+                <td className="px-2"><button onClick={() => { setRows(rows.filter((_, j) => j !== i)); toast.success("Kayıt silindi"); }} title="Sil" className="rounded p-1 text-muted-foreground hover:bg-bad-soft hover:text-bad"><Trash2 className="h-4 w-4" /></button></td>
               </tr>
             ))}
+            {shown.length === 0 && <tr><td colSpan={cols.length + 2} className="px-4 py-10 text-center text-muted-foreground">Kayıt bulunamadı</td></tr>}
           </tbody>
         </table>
         <div className="flex items-center justify-between border-t p-4 text-[13px] text-muted-foreground">
-          <span>Sayfa 1 / 1</span>
-          <div className="flex gap-1">{[1, 2, 3].map((n) => <span key={n} className={`grid h-8 w-8 place-items-center rounded-md ${n === 1 ? "bg-brand text-primary-foreground" : "border"}`}>{n}</span>)}</div>
+          <span>Sayfa {cur} / {pages}</span>
+          <div className="flex gap-1">{Array.from({ length: pages }, (_, k) => k + 1).map((n) => <button key={n} onClick={() => setPage(n)} className={`grid h-8 w-8 place-items-center rounded-md ${n === cur ? "bg-brand text-primary-foreground" : "border hover:bg-muted"}`}>{n}</button>)}</div>
         </div>
       </div>
+      {showNew && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-navy/40" onClick={() => setShowNew(false)}>
+          <div className="w-[520px] rounded-xl bg-card p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-4 flex items-center justify-between"><h2 className="text-lg font-bold text-navy">Yeni Kayıt — {title}</h2><button onClick={() => setShowNew(false)}><X className="h-5 w-5 text-muted-foreground" /></button></div>
+            <div className="grid grid-cols-2 gap-3">
+              {cols.filter((c) => c.k !== "durum").map((c) => (
+                <label key={c.k} className="text-[13px] text-muted-foreground">{c.t}
+                  <input value={form[c.k] ?? ""} onChange={(e) => setForm({ ...form, [c.k]: e.target.value })} className="mt-1 w-full rounded-lg border px-3 py-2 text-navy outline-none focus:border-brand" />
+                </label>
+              ))}
+            </div>
+            <div className="mt-5 flex justify-end gap-2">
+              <button onClick={() => setShowNew(false)} className="rounded-lg border px-4 py-2 text-[13px] text-navy hover:bg-muted">Vazgeç</button>
+              <button onClick={save} className="rounded-lg bg-brand px-4 py-2 text-[13px] font-medium text-primary-foreground">Kaydet</button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
