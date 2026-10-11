@@ -26,8 +26,8 @@ function Index() {
     <>
         <main className="space-y-5 p-6">
           <div>
-            <h1 className="text-4xl font-bold text-navy">Merhaba, Yönetici Bey</h1>
-            <p className="mt-1 text-lg text-muted-foreground">İşletmenizin bugünkü özeti ve önemli işlemler aşağıdadır.</p>
+            <h1 className="text-[28px] font-bold text-navy">Merhaba, Yönetici Bey</h1>
+            <p className="mt-1 text-[15px] text-muted-foreground">İşletmenizin bugünkü özeti ve önemli işlemler aşağıdadır.</p>
           </div>
 
           <div className="grid grid-cols-4 gap-4">
@@ -40,10 +40,10 @@ function Index() {
               <div key={t} className="flex items-center gap-5 rounded-xl border bg-card p-5 shadow-sm">
                 <div className={`grid h-16 w-16 shrink-0 place-items-center rounded-full ${soft[tone]}`}><I className="h-9 w-9" /></div>
                 <div className="min-w-0 flex-1">
-                  <div className="flex justify-between text-base text-muted-foreground">{t}<ChevronRight className="h-5 w-5" /></div>
-                  <div className="my-1 truncate text-3xl font-bold text-navy">{v}</div>
+                  <div className="flex justify-between text-[14px] text-muted-foreground">{t}<ChevronRight className="h-5 w-5" /></div>
+                  <div className="my-1 truncate text-2xl font-bold text-navy">{v}</div>
                   <div className="flex justify-between text-sm">
-                    {p ? <span className={`flex items-center gap-1 text-base font-semibold ${up ? "text-ok" : "text-bad"}`}><ArrowUp className="h-4 w-4" />{p}</span> : <span />}
+                    {p ? <span className={`flex items-center gap-1 text-[14px] font-semibold ${up ? "text-ok" : "text-bad"}`}><ArrowUp className="h-4 w-4" />{p}</span> : <span />}
                     <span className="text-muted-foreground">{s}</span>
                   </div>
                 </div>
@@ -52,7 +52,7 @@ function Index() {
           </div>
 
           <div className="rounded-xl border bg-card p-4 shadow-sm">
-            <h2 className="mb-3 text-xl font-bold text-navy">Hızlı İşlemler</h2>
+            <h2 className="mb-3 text-[17px] font-bold text-navy">Hızlı İşlemler</h2>
             <div className="grid grid-cols-6 gap-4">
               {([
                 ["Yeni Satış Faturası", FilePlus, "ok"], ["Mal Kabul", Truck, "brand"], ["Sevk / İrsaliye", ArrowLeftRight, "warn"],
@@ -60,7 +60,7 @@ function Index() {
               ] as [string, Ic, Tone | null][]).map(([t, I, tone]) => (
                 <div key={t} className={`flex h-28 flex-col justify-between rounded-lg p-4 ${tone ? soft[tone].split(" ")[0] : "bg-muted"}`}>
                   <div className="flex justify-between"><I className={`h-10 w-10 ${tone ? soft[tone].split(" ")[1] : "text-navy"}`} /><ChevronRight className="h-5 w-5 text-navy" /></div>
-                  <div className="text-lg leading-tight text-navy">{t}</div>
+                  <div className="text-[15px] leading-tight text-navy">{t}</div>
                 </div>
               ))}
             </div>
@@ -90,7 +90,7 @@ function Index() {
                 <div key={t} className="flex items-center gap-4 py-3.5">
                   <div className={`grid h-11 w-11 place-items-center rounded-lg ${soft[tone]}`}><I className="h-5 w-5" /></div>
                   <div className="min-w-0 flex-1"><div className="whitespace-nowrap text-sm text-navy">{t}</div><div className="text-sm text-muted-foreground">Onay bekliyor</div></div>
-                  <span className="grid h-8 w-8 place-items-center rounded-md bg-bad-soft text-base text-bad">{c}</span>
+                  <span className="grid h-8 w-8 place-items-center rounded-md bg-bad-soft text-[14px] text-bad">{c}</span>
                 </div>
               ))}
             </Card>

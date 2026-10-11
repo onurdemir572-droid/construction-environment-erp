@@ -1,6 +1,6 @@
-import type { ComponentType } from "react";
+import type { ComponentType, ReactNode } from "react";
 import {
-  Box, ShoppingCart, Truck, Warehouse, Users, Wallet, FileText, CheckSquare, Tag, BarChart3, Settings,
+  Box, ShoppingCart, Truck, Warehouse, Users, Wallet, FileText, CheckSquare, Tag, BarChart3, Settings, ArrowRight,
 } from "lucide-react";
 
 export type Ic = ComponentType<{ className?: string }>;
@@ -34,11 +34,11 @@ export const sub: Record<string, string[]> = {
   "Yönetim": ["Kullanıcılar", "Yetkiler", "Şubeler", "Onay Akışları"],
 };
 
-export function Card({ title, children }: { title: string; children: React.ReactNode }) {
+export function Card({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="rounded-xl border bg-card p-4 shadow-sm">
       <div className="mb-2 flex items-center justify-between">
-        <h3 className="whitespace-nowrap text-xl font-bold text-navy">{title}</h3>
+        <h3 className="whitespace-nowrap text-[17px] font-bold text-navy">{title}</h3>
         <a className="flex shrink-0 items-center gap-1 whitespace-nowrap text-sm text-brand" href="#">Tümünü Gör <ArrowRight className="h-4 w-4" /></a>
       </div>
       <div className="divide-y">{children}</div>
