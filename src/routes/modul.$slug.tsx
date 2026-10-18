@@ -80,7 +80,7 @@ function Modul() {
   const { cols, kpis } = base;
   const text = (v: unknown): string => (typeof v === "object" && v && "props" in (v as any) ? String((v as any).props.children) : String(v ?? ""));
   const filtered = rows.map((r, i) => ({ r, i })).filter(({ r }) =>
-    (fs === "Tümü" || text(r.durum) === fs) &&
+    (fs === "Tümü" || text(r["durum"]) === fs) &&
     (!q || cols.some((c) => text(r[c.k]).toLocaleLowerCase("tr").includes(q.toLocaleLowerCase("tr")))));
   const per = 8;
   const pages = Math.max(1, Math.ceil(filtered.length / per));
