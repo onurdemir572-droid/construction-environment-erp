@@ -21,6 +21,7 @@ export function ErpLayout({ children }: { children: ReactNode }) {
   const hits = q ? Object.values(sub).flat().filter((x) => x.toLocaleLowerCase("tr").includes(q.toLocaleLowerCase("tr"))).slice(0, 6) : [];
   const [zoom, setZoom] = useState(1);
   const [open, setOpen] = useState<string | null>(() => Object.keys(sub).find((k) => (sub[k] ?? []).some((x) => path === "/modul/" + slugify(x))) ?? null);
+  useEffect(() => { const g = Object.keys(sub).find((k) => (sub[k] ?? []).some((x) => path === "/modul/" + slugify(x))); if (g) setOpen(g); setPop(null); }, [path]);
   useEffect(() => {
     const f = () => setZoom(window.innerWidth / 1536);
     f(); window.addEventListener("resize", f);
