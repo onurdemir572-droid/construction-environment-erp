@@ -1,3 +1,7 @@
 - [x] Sol menü alt başlıkları
 - [x] Normal yazı boyutu
 - [x] Modül sayfaları (liste ekranları)
+- [x] Arama, filtre, sayfalama, yeni kayıt, Excel, yazdır
+- [x] Üst çubuk: arama, şube, bildirim, kullanıcı menüsü
+- [x] Ana sayfa bağlantıları
+- [ ] Kalıcı kayıt (veritabanı) — kullanıcı onayı bekliyor

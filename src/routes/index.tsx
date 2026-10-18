@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ShoppingCart, Truck, ChevronRight, ArrowUp, FilePlus, ArrowLeftRight, User, MoreHorizontal, DollarSign,
   Calendar, Receipt, Package, ClipboardList, Box, Tag,
@@ -21,6 +21,9 @@ export const Route = createFileRoute("/")({
 });
 
 
+const QA: Record<string, string> = {"Yeni Satış Faturası":"satis-faturalari","Mal Kabul":"mal-kabul","Sevk / İrsaliye":"sevk-irsaliye","Ürün Ekle":"yeni-urun","Cari Hesap Aç":"yeni-cari","Diğer İşlemler":"satis-raporlari"};
+const KS: Record<string, string> = {"Toplam Satış":"satis-faturalari","Tahsilat":"tahsilatlar","Açık Cari Hesap":"cari-listesi","Stoktaki Ürün":"urun-listesi"};
+
 function Index() {
   return (
     <>
@@ -37,7 +40,7 @@ function Index() {
               ["Açık Cari Hesap", "₺ 532.620", "%3", "23 cari", User, "warn", false],
               ["Stoktaki Ürün", "2.847", "", "Toplam ürün", Box, "violet", true],
             ] as [string, string, string, string, Ic, Tone, boolean][]).map(([t, v, p, s, I, tone, up]) => (
-              <div key={t} className="flex items-center gap-5 rounded-xl border bg-card p-5 shadow-sm">
+              <Link key={t} to="/modul/$slug" params={{ slug: KS[t] ?? "satis-raporlari" }} className="flex items-center gap-5 transition hover:shadow-md rounded-xl border bg-card p-5 shadow-sm">
                 <div className={`grid h-16 w-16 shrink-0 place-items-center rounded-full ${soft[tone]}`}><I className="h-9 w-9" /></div>
                 <div className="min-w-0 flex-1">
                   <div className="flex justify-between text-[14px] text-muted-foreground">{t}<ChevronRight className="h-5 w-5" /></div>
@@ -47,7 +50,7 @@ function Index() {
                     <span className="text-muted-foreground">{s}</span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
@@ -58,16 +61,16 @@ function Index() {
                 ["Yeni Satış Faturası", FilePlus, "ok"], ["Mal Kabul", Truck, "brand"], ["Sevk / İrsaliye", ArrowLeftRight, "warn"],
                 ["Ürün Ekle", Box, "violet"], ["Cari Hesap Aç", User, "bad"], ["Diğer İşlemler", MoreHorizontal, null],
               ] as [string, Ic, Tone | null][]).map(([t, I, tone]) => (
-                <div key={t} className={`flex h-28 flex-col justify-between rounded-lg p-4 ${tone ? soft[tone].split(" ")[0] : "bg-muted"}`}>
+                <Link key={t} to="/modul/$slug" params={{ slug: QA[t] ?? "satis-raporlari" }} className={`flex h-28 transition hover:-translate-y-0.5 hover:shadow-md flex-col justify-between rounded-lg p-4 ${tone ? soft[tone].split(" ")[0] : "bg-muted"}`}>
                   <div className="flex justify-between"><I className={`h-10 w-10 ${tone ? soft[tone].split(" ")[1] : "text-navy"}`} /><ChevronRight className="h-5 w-5 text-navy" /></div>
                   <div className="text-[15px] leading-tight text-navy">{t}</div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
 
           <div className="grid gap-4" style={{ gridTemplateColumns: "minmax(0,1.05fr) minmax(0,1fr) minmax(0,0.95fr) minmax(0,1fr)" }}>
-            <Card title="Son İşlemler">
+            <Card title="Son İşlemler" to="satis-faturalari">
               {([
                 ["Satış Faturası", "#SF2024-0012", "ABC İnşaat Ltd. Şti.", "14:21", Receipt, "bad", ""],
                 ["Mal Kabul", "#MK2024-0045", "XYZ Yapı Malzemeleri A.Ş.", "13:58", Truck, "brand", ""],
@@ -85,7 +88,7 @@ function Index() {
                 </div>
               ))}
             </Card>
-            <Card title="Bekleyen Onaylar">
+            <Card title="Bekleyen Onaylar" to="onay-akislari">
               {([["Satınalma Siparişi", 4, ClipboardList, "violet"], ["Fiyat Listesi Değişikliği", 2, DollarSign, "warn"], ["Cari Limit Artış Talebi", 1, User, "warn"], ["Kampanya Onayı", 3, Tag, "ok"]] as [string, number, Ic, Tone][]).map(([t, c, I, tone]) => (
                 <div key={t} className="flex items-center gap-4 py-3.5">
                   <div className={`grid h-11 w-11 place-items-center rounded-lg ${soft[tone]}`}><I className="h-5 w-5" /></div>
@@ -94,7 +97,7 @@ function Index() {
                 </div>
               ))}
             </Card>
-            <Card title="Stok Uyarıları">
+            <Card title="Stok Uyarıları" to="urun-listesi">
               {([["Çimento 50 kg", 2, "Kritik", "bad"], ["Demir Ø12", 8, "Azalıyor", "warn"], ["Seramik Yapıştırıcı", 5, "Azalıyor", "warn"], ["Alçıpan 12,5 mm", 12, "Normal", "ok"], ["İzolasyon Malzemesi", 25, "Normal", "ok"]] as [string, number, string, Tone][]).map(([t, s, b, tone]) => (
                 <div key={t} className="flex items-center gap-3 py-2">
                   <div className="grid h-11 w-11 place-items-center rounded-md bg-muted text-muted-foreground"><Package className="h-6 w-6" /></div>
@@ -103,7 +106,7 @@ function Index() {
                 </div>
               ))}
             </Card>
-            <Card title="Yaklaşanlar">
+            <Card title="Yaklaşanlar" to="odemeler">
               {([["Ödeme Vadesi (3 cari)", "BUGÜN", "bad"], ["Verilecek Sipariş (8 ürün)", "YARIN", "warn"], ["Stok Sayımı", "12.10.2024", null], ["KDV Beyannamesi", "26.10.2024", null]] as [string, string, Tone | null][]).map(([t, d, tone]) => (
                 <div key={t} className="flex items-center gap-3 py-4">
                   <Calendar className={`h-6 w-6 ${tone === "bad" ? "text-bad" : tone === "warn" ? "text-warn" : "text-brand"}`} />

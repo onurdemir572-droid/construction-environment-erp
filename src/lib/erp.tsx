@@ -1,4 +1,5 @@
 import type { ComponentType, ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
 import {
   Box, ShoppingCart, Truck, Warehouse, Users, Wallet, FileText, CheckSquare, Tag, BarChart3, Settings, ArrowRight,
 } from "lucide-react";
@@ -34,12 +35,12 @@ export const sub: Record<string, string[]> = {
   "Yönetim": ["Kullanıcılar", "Yetkiler", "Şubeler", "Onay Akışları"],
 };
 
-export function Card({ title, children }: { title: string; children: ReactNode }) {
+export function Card({ title, to, children }: { title: string; to: string; children: ReactNode }) {
   return (
     <div className="rounded-xl border bg-card p-4 shadow-sm">
       <div className="mb-2 flex items-center justify-between">
         <h3 className="whitespace-nowrap text-[17px] font-bold text-navy">{title}</h3>
-        <a className="flex shrink-0 items-center gap-1 whitespace-nowrap text-sm text-brand" href="#">Tümünü Gör <ArrowRight className="h-4 w-4" /></a>
+        <Link to="/modul/$slug" params={{ slug: to }} className="flex shrink-0 items-center gap-1 whitespace-nowrap text-sm text-brand hover:underline">Tümünü Gör <ArrowRight className="h-4 w-4" /></Link>
       </div>
       <div className="divide-y">{children}</div>
     </div>
