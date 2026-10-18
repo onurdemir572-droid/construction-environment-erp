@@ -67,7 +67,7 @@ function Index() {
           </div>
 
           <div className="grid gap-4" style={{ gridTemplateColumns: "minmax(0,1.05fr) minmax(0,1fr) minmax(0,0.95fr) minmax(0,1fr)" }}>
-            <Card title="Son İşlemler">
+            <Card title="Son İşlemler" to="satis-faturalari">
               {([
                 ["Satış Faturası", "#SF2024-0012", "ABC İnşaat Ltd. Şti.", "14:21", Receipt, "bad", ""],
                 ["Mal Kabul", "#MK2024-0045", "XYZ Yapı Malzemeleri A.Ş.", "13:58", Truck, "brand", ""],
@@ -85,7 +85,7 @@ function Index() {
                 </div>
               ))}
             </Card>
-            <Card title="Bekleyen Onaylar">
+            <Card title="Bekleyen Onaylar" to="onay-akislari">
               {([["Satınalma Siparişi", 4, ClipboardList, "violet"], ["Fiyat Listesi Değişikliği", 2, DollarSign, "warn"], ["Cari Limit Artış Talebi", 1, User, "warn"], ["Kampanya Onayı", 3, Tag, "ok"]] as [string, number, Ic, Tone][]).map(([t, c, I, tone]) => (
                 <div key={t} className="flex items-center gap-4 py-3.5">
                   <div className={`grid h-11 w-11 place-items-center rounded-lg ${soft[tone]}`}><I className="h-5 w-5" /></div>
@@ -94,7 +94,7 @@ function Index() {
                 </div>
               ))}
             </Card>
-            <Card title="Stok Uyarıları">
+            <Card title="Stok Uyarıları" to="urun-listesi">
               {([["Çimento 50 kg", 2, "Kritik", "bad"], ["Demir Ø12", 8, "Azalıyor", "warn"], ["Seramik Yapıştırıcı", 5, "Azalıyor", "warn"], ["Alçıpan 12,5 mm", 12, "Normal", "ok"], ["İzolasyon Malzemesi", 25, "Normal", "ok"]] as [string, number, string, Tone][]).map(([t, s, b, tone]) => (
                 <div key={t} className="flex items-center gap-3 py-2">
                   <div className="grid h-11 w-11 place-items-center rounded-md bg-muted text-muted-foreground"><Package className="h-6 w-6" /></div>
@@ -103,7 +103,7 @@ function Index() {
                 </div>
               ))}
             </Card>
-            <Card title="Yaklaşanlar">
+            <Card title="Yaklaşanlar" to="odemeler">
               {([["Ödeme Vadesi (3 cari)", "BUGÜN", "bad"], ["Verilecek Sipariş (8 ürün)", "YARIN", "warn"], ["Stok Sayımı", "12.10.2024", null], ["KDV Beyannamesi", "26.10.2024", null]] as [string, string, Tone | null][]).map(([t, d, tone]) => (
                 <div key={t} className="flex items-center gap-3 py-4">
                   <Calendar className={`h-6 w-6 ${tone === "bad" ? "text-bad" : tone === "warn" ? "text-warn" : "text-brand"}`} />
