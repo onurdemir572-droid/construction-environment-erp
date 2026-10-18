@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ShoppingCart, Truck, ChevronRight, ArrowUp, FilePlus, ArrowLeftRight, User, MoreHorizontal, DollarSign,
   Calendar, Receipt, Package, ClipboardList, Box, Tag,
@@ -21,6 +21,9 @@ export const Route = createFileRoute("/")({
 });
 
 
+const QA: Record<string, string> = {"Yeni Satış Faturası":"satis-faturalari","Mal Kabul":"mal-kabul","Sevk / İrsaliye":"sevk-irsaliye","Ürün Ekle":"yeni-urun","Cari Hesap Aç":"yeni-cari","Diğer İşlemler":"satis-raporlari"};
+const KS: Record<string, string> = {"Toplam Satış":"satis-faturalari","Tahsilat":"tahsilatlar","Açık Cari Hesap":"cari-listesi","Stoktaki Ürün":"urun-listesi"};
+
 function Index() {
   return (
     <>
@@ -37,7 +40,7 @@ function Index() {
               ["Açık Cari Hesap", "₺ 532.620", "%3", "23 cari", User, "warn", false],
               ["Stoktaki Ürün", "2.847", "", "Toplam ürün", Box, "violet", true],
             ] as [string, string, string, string, Ic, Tone, boolean][]).map(([t, v, p, s, I, tone, up]) => (
-              <div key={t} className="flex items-center gap-5 rounded-xl border bg-card p-5 shadow-sm">
+              <Link key={t} to="/modul/$slug" params={{ slug: KS[t] ?? "satis-raporlari" }} className="flex items-center gap-5 transition hover:shadow-md rounded-xl border bg-card p-5 shadow-sm">
                 <div className={`grid h-16 w-16 shrink-0 place-items-center rounded-full ${soft[tone]}`}><I className="h-9 w-9" /></div>
                 <div className="min-w-0 flex-1">
                   <div className="flex justify-between text-[14px] text-muted-foreground">{t}<ChevronRight className="h-5 w-5" /></div>
@@ -47,7 +50,7 @@ function Index() {
                     <span className="text-muted-foreground">{s}</span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
@@ -58,10 +61,10 @@ function Index() {
                 ["Yeni Satış Faturası", FilePlus, "ok"], ["Mal Kabul", Truck, "brand"], ["Sevk / İrsaliye", ArrowLeftRight, "warn"],
                 ["Ürün Ekle", Box, "violet"], ["Cari Hesap Aç", User, "bad"], ["Diğer İşlemler", MoreHorizontal, null],
               ] as [string, Ic, Tone | null][]).map(([t, I, tone]) => (
-                <div key={t} className={`flex h-28 flex-col justify-between rounded-lg p-4 ${tone ? soft[tone].split(" ")[0] : "bg-muted"}`}>
+                <Link key={t} to="/modul/$slug" params={{ slug: QA[t] ?? "satis-raporlari" }} className={`flex h-28 transition hover:-translate-y-0.5 hover:shadow-md flex-col justify-between rounded-lg p-4 ${tone ? soft[tone].split(" ")[0] : "bg-muted"}`}>
                   <div className="flex justify-between"><I className={`h-10 w-10 ${tone ? soft[tone].split(" ")[1] : "text-navy"}`} /><ChevronRight className="h-5 w-5 text-navy" /></div>
                   <div className="text-[15px] leading-tight text-navy">{t}</div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
