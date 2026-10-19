@@ -46,7 +46,7 @@ function dataFor(group: string, slug: string): { cols: Col[]; rows: Record<strin
   };
 }
 
-export const Route = createFileRoute("/modul/$slug")({
+export const Route = createFileRoute("/_authenticated/modul/$slug")({
   loader: ({ params }) => {
     const m = titles.get(params.slug);
     if (!m) throw notFound();

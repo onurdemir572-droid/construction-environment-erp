@@ -6,7 +6,7 @@ import {
 import { soft, solid, Card, type Tone } from "@/lib/erp";
 import type { ComponentType } from "react";
 type Ic = ComponentType<{ className?: string }>;
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
     meta: [
       { title: "İnşaatÇevrem ERP — Yapı Market Yönetim Sistemi" },
