@@ -14,16 +14,88 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      kayitlar: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          data: Json
+          durum: string
+          id: string
+          modul: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          data?: Json
+          durum?: string
+          id?: string
+          modul: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          data?: Json
+          durum?: string
+          id?: string
+          modul?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          ad_soyad: string
+          created_at: string
+          id: string
+          sube: string
+        }
+        Insert: {
+          ad_soyad?: string
+          created_at?: string
+          id: string
+          sube?: string
+        }
+        Update: {
+          ad_soyad?: string
+          created_at?: string
+          id?: string
+          sube?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      fmt_tl: { Args: { x: number }; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "yonetici" | "satis" | "depo" | "muhasebe"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +222,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["yonetici", "satis", "depo", "muhasebe"],
+    },
   },
 } as const
